@@ -11,20 +11,14 @@ func main() {
 	rl.InitWindow(screenWidth, screenHeight, "raylib [text] example - ttf loading")
 
 	msg := "안녕"
-
-	// NOTE: Textures/Fonts MUST be loaded after Window initialization (OpenGL context is required)
-
-	// TTF Font loading with custom generation parameters
 	font := rl.LoadFontEx("fonts/Kart_gothic_medium.ttf", 96, []rune(msg))
 
 	fontSize := font.BaseSize
-	fontPosition := rl.NewVector2(40, float32(screenHeight)/2+50)
+	fontPosition := rl.NewVector2(float32(screenWidth)/2-rl.MeasureTextEx(font, msg, float32(fontSize), 0.0).X/2, 0)
 
 	rl.SetTargetFPS(60)
 
 	for !rl.WindowShouldClose() {
-		// Update
-		//----------------------------------------------------------------------------------
 		fontSize += int32(rl.GetMouseWheelMove() * 4.0)
 
 		rl.BeginDrawing()
