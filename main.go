@@ -10,32 +10,38 @@ func main() {
 
 	rl.InitWindow(screenWidth, screenHeight, "raylib [text] example - ttf loading")
 
-	hello := Header{
-		Msg:      "안녕",
-		Position: rl.NewVector2(0, 0),
-		Spacing:  0,
-		Color:    rl.Black,
-	}
-
 	msg := "안녕"
 
 	font := rl.LoadFontEx("fonts/Kart_gothic_medium.ttf", 96, []rune(msg))
 	fontSize := font.BaseSize
-	fontPosition := rl.NewVector2(float32(screenWidth)/2-rl.MeasureTextEx(font, msg, float32(fontSize), 0.0).X/2, 0)
 
 	rl.SetTargetFPS(60)
 
+	title := createHeader("안녕하세요")
+	title.CenterX(float32(screenWidth))
+
 	for !rl.WindowShouldClose() {
 		fontSize += int32(rl.GetMouseWheelMove() * 4.0)
-
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.RayWhite)
-		rl.DrawTextEx(font, msg, fontPosition, float32(fontSize), 0, rl.Black)
+		title.Draw()
 		rl.EndDrawing()
 	}
 
 	rl.UnloadFont(font) // Font unloading
 	rl.CloseWindow()
+}
+
+func createHeader(msg string) Header {
+	header := Header{
+		Msg:      msg,
+		Position: rl.NewVector2(0, 0),
+		Spacing:  0,
+		Color:    rl.Black,
+	}
+	header.setFont("fonts/Kart_gothic_medium.ttf")
+	header.Size = float32(header.Font.BaseSize)
+	return header
 }
 
 type Header struct {
@@ -53,4 +59,8 @@ func (h *Header) CenterX(screenWidth float32) {
 
 func (h *Header) setFont(filename string) {
 	h.Font = rl.LoadFontEx(filename, 96, []rune(h.Msg))
+}
+
+func (h *Header) Draw() {
+	rl.DrawTextEx(h.Font, h.Msg, h.Position, h.Size, h.Spacing, h.Color)
 }
