@@ -2,19 +2,19 @@ package text
 
 import rl "github.com/gen2brain/raylib-go/raylib"
 
-func CreateHeader(msg string) Header {
-	header := Header{
+func New(msg string) Text {
+	t := Text{
 		Msg:      msg,
 		Position: rl.NewVector2(0, 0),
 		Spacing:  0,
 		Color:    rl.Black,
 	}
-	header.setFont("fonts/Kart_gothic_medium.ttf")
-	header.Size = float32(header.Font.BaseSize)
-	return header
+	t.SetFont("fonts/Kart_gothic_medium.ttf")
+	t.Size = float32(t.Font.BaseSize)
+	return t
 }
 
-type Header struct {
+type Text struct {
 	Font     rl.Font
 	Msg      string
 	Position rl.Vector2
@@ -23,38 +23,43 @@ type Header struct {
 	Color    rl.Color
 }
 
-func (h *Header) Move(minX float32, maxX float32) {
+func (t *Text) MoveWithArrow(minX float32, maxX float32, minY float32, maxY float32) {
 	switch {
 	case rl.IsKeyDown(rl.KeyLeft):
-		if h.Position.X > minX {
-			h.Position.X -= 10
+		if t.Position.X > minX+10 {
+			t.Position.X -= 10
 		}
 	case rl.IsKeyDown(rl.KeyRight):
-		if h.Position.X < maxX-h.Len() {
-			h.Position.X += 10
+		if t.Position.X < maxX-t.Len() {
+			t.Position.X += 10
+		}
+	case rl.IsKeyDown(rl.KeyUp):
+		if t.Position.Y > minY+10 {
+			t.Position.Y -= 10
 		}
 	case rl.IsKeyDown(rl.KeyDown):
-	case rl.IsKeyDown(rl.KeyDown):
-
+		if t.Position.Y < maxY-t.Heigth() {
+			t.Position.Y += 10
+		}
 	}
 }
 
-func (h *Header) Len() float32 {
-	return rl.MeasureTextEx(h.Font, h.Msg, h.Size, h.Spacing).X
+func (t *Text) Len() float32 {
+	return rl.MeasureTextEx(t.Font, t.Msg, t.Size, t.Spacing).X
 }
 
-func (h *Header) Heigth() float32 {
-	return rl.MeasureTextEx(h.Font, h.Msg, h.Size, h.Spacing).Y
+func (t *Text) Heigth() float32 {
+	return rl.MeasureTextEx(t.Font, t.Msg, t.Size, t.Spacing).Y
 }
 
-func (h *Header) CenterX(screenWidth float32) {
-	h.Position.X = screenWidth/2 - rl.MeasureTextEx(h.Font, h.Msg, h.Size, h.Spacing).X/2
+func (t *Text) CenterX(screenWidth float32) {
+	t.Position.X = screenWidth/2 - rl.MeasureTextEx(t.Font, t.Msg, t.Size, t.Spacing).X/2
 }
 
-func (h *Header) setFont(filename string) {
-	h.Font = rl.LoadFontEx(filename, 96, []rune(h.Msg))
+func (t *Text) SetFont(filename string) {
+	t.Font = rl.LoadFontEx(filename, 96, []rune(t.Msg))
 }
 
-func (h *Header) Draw() {
-	rl.DrawTextEx(h.Font, h.Msg, h.Position, h.Size, h.Spacing, h.Color)
+func (t *Text) Draw() {
+	rl.DrawTextEx(t.Font, t.Msg, t.Position, t.Size, t.Spacing, t.Color)
 }
