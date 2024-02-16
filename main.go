@@ -1,19 +1,17 @@
 package main
 
 import (
+	"fmt"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 func main() {
+	fmt.Println("Compiling...")
 	screenWidth := int32(800)
 	screenHeight := int32(450)
 
 	rl.InitWindow(screenWidth, screenHeight, "raylib [text] example - ttf loading")
-
-	msg := "안녕"
-
-	font := rl.LoadFontEx("fonts/Kart_gothic_medium.ttf", 96, []rune(msg))
-	fontSize := font.BaseSize
 
 	rl.SetTargetFPS(60)
 
@@ -21,14 +19,13 @@ func main() {
 	title.CenterX(float32(screenWidth))
 
 	for !rl.WindowShouldClose() {
-		fontSize += int32(rl.GetMouseWheelMove() * 4.0)
+		title.Size += (rl.GetMouseWheelMove() * 4.0)
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.RayWhite)
 		title.Draw()
 		rl.EndDrawing()
 	}
-
-	rl.UnloadFont(font) // Font unloading
+	rl.UnloadFont(title.Font)
 	rl.CloseWindow()
 }
 
