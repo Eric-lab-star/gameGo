@@ -10,27 +10,29 @@ import (
 func main() {
 	fmt.Println("Compiling...")
 	screenWidth := int32(800)
-	screenHeight := int32(450)
+	screenHeight := int32(1000)
 
 	rl.InitWindow(screenWidth, screenHeight, "raylib [text] example - ttf loading")
 
 	rl.SetTargetFPS(60)
 
-	title := text.New("안녕하세요")
-	title.CenterX(float32(screenWidth))
-
+	krMsg := "안녕하세요"
+	koreanFont := rl.LoadFontEx("./fonts/Kart_gothic_medium.ttf", 96, []rune(krMsg))
+	fmt.Println("msg lenght", +len(krMsg))
 	for !rl.WindowShouldClose() {
-		title.Size += (rl.GetMouseWheelMove() * 4.0)
-		title.MoveWithArrow(0, float32(screenWidth), 0, float32(screenHeight))
-
-		handleFileDrop(&title)
 
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.RayWhite)
-		title.Draw()
+
+		for i, h := 0, 96; i < 6; i, h = i+1, h+96 {
+
+			rl.DrawTextEx(koreanFont, krMsg[0:i], rl.Vector2{X: 0, Y: float32(h)}, 96, 0, rl.Black)
+		}
+
 		rl.EndDrawing()
 	}
-	rl.UnloadFont(title.Font)
+
+	rl.UnloadFont(koreanFont)
 	rl.CloseWindow()
 }
 

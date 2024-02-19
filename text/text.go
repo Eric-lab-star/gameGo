@@ -63,3 +63,7 @@ func (t *Text) SetFont(filename string) {
 func (t *Text) Draw() {
 	rl.DrawTextEx(t.Font, t.Msg, t.Position, t.Size, t.Spacing, t.Color)
 }
+
+func (t *Text) Animate(frame int) {
+	rl.DrawTextEx(t.Font, t.Msg[0:(frame)/10], t.Position, t.Size, t.Spacing, t.Color)
+}
