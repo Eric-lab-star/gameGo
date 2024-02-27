@@ -3,11 +3,16 @@ package main
 import (
 	"fmt"
 
-	text "github.com/eric-lab-star/game/text"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func main() {
+var (
+	Msg        string
+	koreanFont rl.Font
+)
+
+func init() {
+
 	fmt.Println("Compiling...")
 	screenWidth := int32(800)
 	screenHeight := int32(1000)
@@ -16,37 +21,34 @@ func main() {
 
 	rl.SetTargetFPS(60)
 
-	krMsg := "안녕하세요"
-	koreanFont := rl.LoadFontEx("./fonts/Kart_gothic_medium.ttf", 96, []rune(krMsg))
-	fmt.Println("msg lenght", +len(krMsg))
+}
+
+func main() {
+
+	Msg = "안녕하세요"
+	koreanFont = rl.LoadFontEx("./fonts/Kart_gothic_medium.ttf", 96, []rune(Msg))
+	counter := 0
+
 	for !rl.WindowShouldClose() {
-
-		rl.BeginDrawing()
-		rl.ClearBackground(rl.RayWhite)
-
-		for i, h := 0, 96; i < 6; i, h = i+1, h+96 {
-
-			rl.DrawTextEx(koreanFont, krMsg[0:i], rl.Vector2{X: 0, Y: float32(h)}, 96, 0, rl.Black)
+		if counter < 150 {
+			counter++
 		}
 
-		rl.EndDrawing()
-	}
+		if ((counter / 10) % 3) == 0 {
 
+			draw(counter / 10)
+		}
+
+	}
 	rl.UnloadFont(koreanFont)
 	rl.CloseWindow()
 }
 
-func handleFileDrop(text *text.Text) {
+func draw(frame int) {
 
-	if rl.IsFileDropped() {
-		droppedFiles := []string{}
-		droppedFiles = rl.LoadDroppedFiles()
-		count := len(droppedFiles)
+	rl.BeginDrawing()
+	rl.ClearBackground(rl.RayWhite)
 
-		if count == 1 {
-			rl.UnloadFont(text.Font)
-			text.SetFont(droppedFiles[0])
-			rl.UnloadDroppedFiles()
-		}
-	}
+	rl.DrawTextEx(koreanFont, Msg[0:frame], rl.Vector2{X: 0, Y: float32(0)}, 96, 0, rl.Black)
+	rl.EndDrawing()
 }
