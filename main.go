@@ -1,54 +1,62 @@
 package main
 
-import (
-	"fmt"
-
-	rl "github.com/gen2brain/raylib-go/raylib"
-)
+import rl "github.com/gen2brain/raylib-go/raylib"
 
 var (
-	Msg        string
-	koreanFont rl.Font
+	maxBuildings int            = 100
+	screenWidth  int32          = 800
+	screenHeight int32          = 450
+	player       rl.Rectangle   = rl.NewRectangle(400, 280, 40, 40)
+	buildings    []rl.Rectangle = make([]rl.Rectangle, maxBuildings)
+	buildColors  []rl.Color     = make([]rl.Color, maxBuildings)
+	spacing      float32        = 0
 )
 
 func init() {
-
-	fmt.Println("Compiling...")
-	screenWidth := int32(800)
-	screenHeight := int32(1000)
-
-	rl.InitWindow(screenWidth, screenHeight, "raylib [text] example - ttf loading")
-
+	rl.InitWindow(screenWidth, screenHeight, "2d camera")
+	createBuildings()
 	rl.SetTargetFPS(60)
+}
 
+func createBuildings() {
+	for i := 0; i < maxBuildings; i++ {
+		r := rl.Rectangle{
+			Width:  float32(rl.GetRandomValue(50, 200)),
+			Height: float32(rl.GetRandomValue(100, 800)),
+			Y:      float32(screenHeight) - 130,
+			X:      -6000 + spacing,
+		}
+		r.Y -= r.Height
+		spacing += r.Width
+
+		c := rl.NewColor(
+			byte(rl.GetRandomValue(200, 240)),
+			byte(rl.GetRandomValue(200, 240)),
+			byte(rl.GetRandomValue(200, 240)),
+			byte(255),
+		)
+		buildings[i] = r
+		buildColors[i] = c
+	}
 }
 
 func main() {
 
-	Msg = "안녕하세요"
-	koreanFont = rl.LoadFontEx("./fonts/Kart_gothic_medium.ttf", 96, []rune(Msg))
-	counter := 0
-
-	for !rl.WindowShouldClose() {
-		if counter < 150 {
-			counter++
-		}
-
-		if ((counter / 10) % 3) == 0 {
-
-			draw(counter / 10)
-		}
-
-	}
-	rl.UnloadFont(koreanFont)
+	gameLoop()
 	rl.CloseWindow()
 }
 
-func draw(frame int) {
+func gameLoop() {
+	for !rl.WindowShouldClose() {
+		rl.BeginDrawing()
+		rl.ClearBackground(rl.RayWhite)
+		for i := 0; i < maxBuildings; i++ {
+			rl.DrawRectangleRec(buildings[i], buildColors[i])
+		}
 
-	rl.BeginDrawing()
-	rl.ClearBackground(rl.RayWhite)
+		rl.DrawRectangleRec(player, rl.Red)
+		rl.EndDrawing()
 
-	rl.DrawTextEx(koreanFont, Msg[0:frame], rl.Vector2{X: 0, Y: float32(0)}, 96, 0, rl.Black)
-	rl.EndDrawing()
+	}
+
 }
