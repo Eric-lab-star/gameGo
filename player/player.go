@@ -20,7 +20,7 @@ func New() Player2D {
 }
 
 func (p Player2D) Position() rl.Vector2 {
-	return rl.NewVector2(p.X/2, p.Y/2)
+	return rl.NewVector2(p.X+p.Width/2, p.Y+p.Height/2)
 }
 
 func (p Player2D) Draw() {

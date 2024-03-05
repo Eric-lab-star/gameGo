@@ -3,7 +3,7 @@ package building
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 const (
-	MaxBuildings int = 100
+	maxBuildings int = 100
 )
 
 type Building struct {
@@ -15,11 +15,10 @@ type Buildings []Building
 
 func CreateBuildings(screenHeight int32, land float32) Buildings {
 
-	buildings := make([]Building, MaxBuildings)
-
+	buildings := make([]Building, maxBuildings)
 	spacing := float32(0)
 
-	for i := 0; i < MaxBuildings; i++ {
+	for i := 0; i < maxBuildings; i++ {
 		buildings[i].Shape = rl.Rectangle{
 			Width:  float32(rl.GetRandomValue(50, 200)),
 			Height: float32(rl.GetRandomValue(100, 800)),
@@ -40,7 +39,7 @@ func CreateBuildings(screenHeight int32, land float32) Buildings {
 }
 
 func (bs Buildings) Draw() {
-	for i := 0; i < MaxBuildings; i++ {
+	for i := 0; i < maxBuildings; i++ {
 		rl.DrawRectangleRec(bs[i].Shape, bs[i].Color)
 	}
 }
