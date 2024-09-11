@@ -1,3 +1,0 @@
-# gameGo
-
-hellow world
